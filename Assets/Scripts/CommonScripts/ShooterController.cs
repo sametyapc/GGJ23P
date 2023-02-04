@@ -25,27 +25,31 @@ public class ShooterController : MonoBehaviour
             if (inBattle)
             {
                 StartCoroutine("FireRoutine");
-
+                GetComponent<PlayerController>().PlayShootAnimation();
             }
         }
     }
 
     IEnumerator FireRoutine()
     {
-        canShoot= false;
-        var newBullet = Instantiate(bullet,bulletExitPoint.position,Quaternion.Euler(0,90,0));
+        canShoot = false;
+        yield return new WaitForSeconds(fireRate);
+        canShoot = true;
+    }
+
+    private void CallBullet()
+    {
+        var newBullet = Instantiate(bullet, bulletExitPoint.position, Quaternion.Euler(0, 90, 0));
         if (transform.localScale.x < 0)
         {
-            newBullet.GetComponent<Rigidbody>().velocity = new Vector3(0,0, -bulletSpeed);
+            newBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -bulletSpeed);
 
         }
         else
         {
             newBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, bulletSpeed);
         }
-        newBullet.layer = isPlayer ? LayerMask.NameToLayer("PlayerBullet"): LayerMask.NameToLayer("EnemyBullet");
-        yield return new WaitForSeconds(fireRate);
-        canShoot= true;
+        newBullet.layer = isPlayer ? LayerMask.NameToLayer("PlayerBullet") : LayerMask.NameToLayer("EnemyBullet");
     }
 
     public void InBattleStatus(bool status)

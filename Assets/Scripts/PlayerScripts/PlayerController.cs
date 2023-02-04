@@ -107,6 +107,11 @@ public class PlayerController : MonoBehaviour
         }        
     }
 
+    public void PlayShootAnimation()
+    {
+        m_anim.Play("PlayerATTACK");
+    }
+
 
 
 }
